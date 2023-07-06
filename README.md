@@ -124,6 +124,24 @@ python -u ./scripts/make_kv_retrieval_data.py \
     --output-path kv-retrieval_data/kv-retrieval-300_keys.jsonl.gz
 ```
 
+## Prompting
+
+Code for converting the examples into string prompts is in
+[`prompts/`](./prompts). After installing `pip` requirements, you can run tests
+with:
+
+``` sh
+$ py.test prompts/test_prompting.py
+========================================= test session starts =========================================
+platform linux -- Python 3.10.12, pytest-7.4.0, pluggy-1.2.0
+rootdir: /home/nfliu/git/lost-in-the-middle
+collected 7 items
+
+prompts/test_prompting.py .......                                                               [100%]
+
+========================================== 7 passed in 0.08s ==========================================
+```
+
 ## References
 
 Please consider citing our work if you found this code or our paper beneficial to your research.
