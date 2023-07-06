@@ -41,6 +41,40 @@ Each line of this gzipped file is in the following format:
 }
 ```
 
+## Key-Value Retrieval Data
+
+[`kv_retrieval_data/`](./kv_retrieval_data/) contains multi-document question answering data for the
+oracle setting (1 input document, which is exactly the passage the answers the
+question) and 10-, 20-, and 30-document settings (where 1 input passage answers
+the question, and the other passages do not contain an NQ-annotated answer).
+
+Each line of this gzipped file is in the following format:
+
+``` sh
+{
+  "ordered_kv_records": [
+    ...
+    [
+      "adde4211-888b-48e3-9dbe-66c66551b05f",
+      "8bc3e90d-e044-4923-9a5d-7bf48917ed39"
+    ],
+    [
+      "2a8d601d-1d69-4e64-9f90-8ad825a74195",
+      "bb3ba2a5-7de8-434b-a86e-a88bb9fa7289"
+    ],
+    [
+      "006b46ef-03fd-4380-938c-49cb03754370",
+      "9faeacbe-1d0e-40da-a5db-df598a104880"
+    ],
+    ...
+  ],
+  "key": "2a8d601d-1d69-4e64-9f90-8ad825a74195",
+  "value": "bb3ba2a5-7de8-434b-a86e-a88bb9fa7289"
+}
+```
+
+The `ordered_kv_records` is a list of [key, value] pairs. The `key` specifies a particular key to retrieve from `ordered_kv_records`, and the `value` lists its expected associated value.
+
 ## References
 
 Please consider citing our work if you found this code or our paper beneficial to your research.
