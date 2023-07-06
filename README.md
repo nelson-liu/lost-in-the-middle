@@ -75,6 +75,42 @@ Each line of this gzipped file is in the following format:
 
 The `ordered_kv_records` is a list of [key, value] pairs. The `key` specifies a particular key to retrieve from `ordered_kv_records`, and the `value` lists its expected associated value.
 
+### Manipulating the gold index in key-value retrieval data
+
+To manipulate the gold index in key-value retrieval data, modify the
+`ordered_kv_records`. For example, for `gold_index = 0` (put the key-value
+pair to retrieve at the very start of the input context).
+
+``` python
+from copy import deepcopy
+
+from tqdm import tqdm
+from xopen import xopen
+
+gold_index = 0
+gold_index_kv_examples = []
+
+with xopen(input_path) as fin:
+    for line in fin:
+        input_example = json.loads(line)
+
+        # Get the prediction for the input example
+        ordered_kv_records = deepcopy(input_example["ordered_kv_records"])
+        key = input_example["key"]
+        value = input_example["value"]
+        if gold_index is not None:
+            original_kv_index = ordered_kv_records.index([key, value])
+            # Remove the kv from its original index
+            original_kv = ordered_kv_records.pop(original_kv_index)
+            ordered_kv_records.insert(gold_index, original_kv)
+
+        gold_index_kv_examples.append({
+            "key": key,
+            "value": value,
+            "ordered_kv_records": ordered_kv_records
+        })
+```
+
 ### Generating new key-value retrieval data
 
 To generate new key-value retrieval data, use:
