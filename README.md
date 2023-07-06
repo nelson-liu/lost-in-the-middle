@@ -75,6 +75,18 @@ Each line of this gzipped file is in the following format:
 
 The `ordered_kv_records` is a list of [key, value] pairs. The `key` specifies a particular key to retrieve from `ordered_kv_records`, and the `value` lists its expected associated value.
 
+### Generating new key-value retrieval data
+
+To generate new key-value retrieval data, use:
+
+
+``` sh
+python -u ./scripts/make_kv_retrieval_data.py \
+    --num-keys 300 \
+    --num-examples 500 \
+    --output-path kv-retrieval_data/kv-retrieval-300_keys.jsonl.gz
+```
+
 ## References
 
 Please consider citing our work if you found this code or our paper beneficial to your research.
