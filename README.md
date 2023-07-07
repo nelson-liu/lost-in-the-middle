@@ -1,6 +1,7 @@
 # Lost in the Middle: How Language Models Use Long Contexts
 
-This repository contains accompanying material for Lost in the Middle: How Language Models Use Long Contexts.
+This repository contains accompanying material for [Lost in the Middle: How
+Language Models Use Long Contexts](https://arxiv.org/abs/2307.03172).
 
 ## Multi-Document Question Answering Data
 
