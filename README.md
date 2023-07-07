@@ -171,7 +171,7 @@ Please consider citing our work if you found this code or our paper beneficial t
 @misc{liu-etal:2023:arxiv,
   author    = {Nelson F. Liu  and  Kevin Lin  and  John Hewitt  and Ashwin Paranjape  and Michele Bevilacqua  and  Fabio Petroni  and  Percy Liang},
   title     = {Lost in the Middle: How Language Models Use Long Contexts},
-  note      = {},
+  note      = {arXiv:2307.03172},
   year      = {2023}
 }
 
