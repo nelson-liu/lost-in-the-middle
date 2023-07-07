@@ -41,6 +41,26 @@ Each line of this gzipped file is in the following format:
 }
 ```
 
+### Generating new multi-document QA data.
+
+1. First, download Contriever retrieval results for each of the queries:
+
+``` sh
+wget https://nlp.stanford.edu/data/nfliu/lost-in-the-middle/nq-open-contriever-msmarco-retrieved-documents.jsonl.gz
+```
+
+2. Then, to generate examples with 20 total documents with the relevant documents at positions 0, 4, 9, 14, and 19, run:
+
+``` sh
+for gold_index in 0 4 9 14 19; do
+    python -u ./scripts/make_qa_data_from_retrieval_results.py \
+        --input-path nq-open-contriever-msmarco-retrieved-documents.jsonl.gz \
+        --num-total-documents 20 \
+        --gold-index ${gold_index} \
+        --output-path qa_data/nq-open-20_total_documents_gold_at_${gold_index}.jsonl.gz
+done
+```
+
 ## Key-Value Retrieval Data
 
 [`kv_retrieval_data/`](./kv_retrieval_data/) contains multi-document question answering data for the
