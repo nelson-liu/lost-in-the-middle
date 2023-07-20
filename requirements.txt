@@ -2,3 +2,23 @@ tqdm
 xopen
 pydantic
 pytest
+
+# For running longchat locally
+longchat@git+https://github.com/DachengLi1/LongChat.git@43d71f03d7711a2ab3b78ee8d1e38b65bb7fd22f
+
+# For running MPT locally
+transformers
+torch
+einops
+flash-attn==1.0.5
+triton-pre-mlir@git+https://github.com/vchiley/triton.git@triton_pre_mlir#subdirectory=python
+accelerate
+
+# Checks style, syntax, and other useful errors.
+flake8==5.0.4
+
+# Automatic code formatting
+black==22.10.0
+
+# For creating git precommit hooks
+pre-commit
