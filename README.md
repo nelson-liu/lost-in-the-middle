@@ -3,6 +3,44 @@
 This repository contains accompanying material for [Lost in the Middle: How
 Language Models Use Long Contexts](https://arxiv.org/abs/2307.03172).
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Multi-Document Question Answering Experiments](#multi-document-question-answering-experiments)
+- [Multi-Document Question Answering Data](#multi-document-question-answering-data)
+  * [Generating new multi-document QA data.](#generating-new-multi-document-qa-data)
+- [Key-Value Retrieval Experiments](#key-value-retrieval-experiments)
+- [Key-Value Retrieval Data](#key-value-retrieval-data)
+  * [Generating new key-value retrieval data](#generating-new-key-value-retrieval-data)
+- [Testing Prompting Templates](#testing-prompting-templates)
+- [References](#references)
+
+## Installation
+
+1. Set up a conda environment
+
+``` sh
+conda create -n lost-in-the-middle python=3.9 --yes
+conda activate lost-in-the-middle
+```
+
+2. Install package and requirements
+
+``` sh
+pip install -e .
+```
+
+3. (optional) set up pre-commit hooks for development.
+
+``` sh
+pre-commit install
+```
+
+## Multi-Document Question Answering Experiments
+
+See [EXPERIMENTS.md](./EXPERIMENTS.md#multi-document-question-answering) for
+instructions to run and evaluate models on the multi-document QA task.
+
 ## Multi-Document Question Answering Data
 
 [`qa_data/`](./qa_data/) contains multi-document question answering data for the
@@ -62,6 +100,11 @@ for gold_index in 0 4 9 14 19; do
 done
 ```
 
+## Key-Value Retrieval Experiments
+
+See [EXPERIMENTS.md](./EXPERIMENTS.md#key-value-retrieval) for
+instructions to run and evaluate models on the key-value retrieval task.
+
 ## Key-Value Retrieval Data
 
 [`kv_retrieval_data/`](./kv_retrieval_data/) contains multi-document question answering data for the
@@ -98,42 +141,6 @@ The `ordered_kv_records` is a list of `[key, value]` pairs. The `key` specifies
 a particular key to retrieve from `ordered_kv_records`, and the `value` lists
 its expected associated value.
 
-### Manipulating the gold index in key-value retrieval data
-
-To manipulate the gold index in key-value retrieval data, modify the
-`ordered_kv_records`. For example, for `gold_index = 0` (put the key-value
-pair to retrieve at the very start of the input context).
-
-``` python
-from copy import deepcopy
-
-from tqdm import tqdm
-from xopen import xopen
-
-gold_index = 0
-gold_index_kv_examples = []
-
-with xopen(input_path) as fin:
-    for line in fin:
-        input_example = json.loads(line)
-
-        # Get the prediction for the input example
-        ordered_kv_records = deepcopy(input_example["ordered_kv_records"])
-        key = input_example["key"]
-        value = input_example["value"]
-        if gold_index is not None:
-            original_kv_index = ordered_kv_records.index([key, value])
-            # Remove the kv from its original index
-            original_kv = ordered_kv_records.pop(original_kv_index)
-            ordered_kv_records.insert(gold_index, original_kv)
-
-        gold_index_kv_examples.append({
-            "key": key,
-            "value": value,
-            "ordered_kv_records": ordered_kv_records
-        })
-```
-
 ### Generating new key-value retrieval data
 
 To generate new key-value retrieval data, use:
@@ -145,20 +152,20 @@ python -u ./scripts/make_kv_retrieval_data.py \
     --output-path kv-retrieval_data/kv-retrieval-300_keys.jsonl.gz
 ```
 
-## Prompting
+## Testing Prompting Templates
 
 Code for converting the examples into string prompts is in
-[`prompts/`](./prompts). After installing `pip` requirements, you can run tests
-with:
+[`src/lost_in_the_middle/prompting.py`](./src/lost_in_the_middle/prompting.py). 
+After following the installation instructions above, you can run tests with:
 
 ``` sh
-$ py.test prompts/test_prompting.py
+$ py.test tests/
 ========================================= test session starts =========================================
-platform linux -- Python 3.10.12, pytest-7.4.0, pluggy-1.2.0
+platform linux -- Python 3.9.17, pytest-7.4.0, pluggy-1.2.0
 rootdir: /home/nfliu/git/lost-in-the-middle
 collected 7 items
 
-prompts/test_prompting.py .......                                                               [100%]
+tests/test_prompting.py .......                                                                 [100%]
 
 ========================================== 7 passed in 0.08s ==========================================
 ```
@@ -174,5 +181,4 @@ Please consider citing our work if you found this code or our paper beneficial t
   note      = {arXiv:2307.03172},
   year      = {2023}
 }
-
 ```

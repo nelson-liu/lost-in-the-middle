@@ -5,7 +5,7 @@ from typing import List, Optional, Tuple, Type, TypeVar
 
 from pydantic.dataclasses import dataclass
 
-PROMPTS_ROOT = (pathlib.Path(__file__).parent).resolve()
+PROMPTS_ROOT = (pathlib.Path(__file__).parent / "prompts").resolve()
 
 T = TypeVar("T")
 

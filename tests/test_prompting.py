@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pytest
 
-from .prompting import (
+from lost_in_the_middle.prompting import (
     Document,
     get_closedbook_qa_prompt,
     get_kv_retrieval_prompt,
@@ -127,11 +127,11 @@ def test_get_kv_retrieval_prompt():
             "Extract the value corresponding to the specified key in the JSON object below.",
             "",
             "JSON data:",
-            "{\"test key1\": \"test value1\",",
-            " \"test key2\": \"test value2\",",
-            " \"test key3\": \"test value3\"}",
+            '{"test key1": "test value1",',
+            ' "test key2": "test value2",',
+            ' "test key3": "test value3"}',
             "",
-            "Key: \"test key2\"",
+            'Key: "test key2"',
             "Corresponding value:",
         ]
     )
@@ -147,14 +147,14 @@ def test_get_kv_retrieval_prompt_with_query_aware_contextualization():
         [
             "Extract the value corresponding to the specified key in the JSON object below.",
             "",
-            "Key: \"test key2\"",
+            'Key: "test key2"',
             "",
             "JSON data:",
-            "{\"test key1\": \"test value1\",",
-            " \"test key2\": \"test value2\",",
-            " \"test key3\": \"test value3\"}",
+            '{"test key1": "test value1",',
+            ' "test key2": "test value2",',
+            ' "test key3": "test value3"}',
             "",
-            "Key: \"test key2\"",
+            'Key: "test key2"',
             "Corresponding value:",
         ]
     )
