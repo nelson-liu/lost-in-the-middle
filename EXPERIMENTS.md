@@ -234,6 +234,116 @@ Gold Index 19:
 best_subspan_em: 0.5502824858757062
 ```
 
+## llama-2
+
+To run llama-2 models on multi-document question answering,
+use [`./scripts/get_qa_responses_from_llama_2.py`](./scripts/get_qa_responses_from_llama_2.py).
+Below are commands for running `Llama-2-70b-chat-hf` on different multi-document QA
+settings. You can run any other Llama-2 model by changing the model identifier (e.g., 
+`Llama-2-13b-hf`, `Llama-2-7b-chat-hf`, etc).
+
+Running the 70b models requires 2 80GB GPUs. If you're running a 13b or 7b model, only
+1 80GB GPU is required.
+
+### Llama-2-70b-chat-hf on oracle
+
+Getting predictions:
+
+```
+python -u ./scripts/get_qa_responses_from_llama_2.py \
+    --input-path qa_data/nq-open-oracle.jsonl.gz \
+    --max-new-tokens 100 \
+    --num-gpus 2 \
+    --model meta-llama/Llama-2-70b-chat-hf \
+    --output-path qa_predictions/nq-open-oracle-llama-2-70b-chat-hf-predictions.jsonl.gz
+```
+
+Evaluating: 
+
+```
+python -u ./scripts/evaluate_qa_responses.py \
+    --input-path qa_predictions/nq-open-oracle-llama-2-70b-chat-hf-predictions.jsonl.gz \
+    --output-path qa_predictions/nq-open-oracle-llama-2-70b-chat-hf-predictions-scored.jsonl.gz
+```
+
+You should get something approximately around:
+
+```
+best_subspan_em: 0.8467043314500942
+```
+
+### Llama-2-70b-chat-hf on closedbook
+
+Getting predictions:
+
+```
+python -u ./scripts/get_qa_responses_from_llama_2.py \
+    --input-path qa_data/nq-open-oracle.jsonl.gz \
+    --num-gpus 2 \
+    --max-new-tokens 100 \
+    --closedbook \
+    --model meta-llama/Llama-2-70b-chat-hf \
+    --output-path qa_predictions/nq-open-oracle-llama-2-70b-chat-hf-closedbook-predictions.jsonl.gz
+```
+
+Evaluating: 
+
+```
+python -u ./scripts/evaluate_qa_responses.py \
+    --input-path qa_predictions/nq-open-oracle-llama-2-70b-chat-hf-closedbook-predictions.jsonl.gz \
+    --output-path qa_predictions/nq-open-oracle-llama-2-70b-chat-hf-closedbook-predictions-scored.jsonl.gz
+```
+
+You should get something approximately around:
+
+```
+best_subspan_em: 0.35291902071563086
+```
+
+### Llama-2-70b-chat-hf on 20-document setting
+
+Getting predictions:
+
+```
+for gold_index in 0 4 9 14 19; do
+    python -u ./scripts/get_qa_responses_from_llama_2.py \
+        --input-path qa_data/20_total_documents/nq-open-20_total_documents_gold_at_${gold_index}.jsonl.gz \
+        --max-new-tokens 100 \
+        --num-gpus 2 \
+        --model meta-llama/Llama-2-70b-chat-hf \
+        --output-path qa_predictions/20_total_documents/nq-open-20_total_documents_gold_at_${gold_index}-llama-2-70b-chat-hf-predictions.jsonl.gz
+done
+```
+
+Evaluating: 
+
+```
+for gold_index in 0 4 9 14 19; do
+    python -u ./scripts/evaluate_qa_responses.py \
+        --input-path qa_predictions/20_total_documents/nq-open-20_total_documents_gold_at_${gold_index}-llama-2-70b-chat-hf-predictions.jsonl.gz \
+        --output-path qa_predictions/20_total_documents/nq-open-20_total_documents_gold_at_${gold_index}-llama-2-70b-chat-hf-predictions-scored.jsonl.gz
+done
+```
+
+You should get something approximately around:
+
+```
+Gold Index 0:
+best_subspan_em: 0.567741935483871
+
+Gold Index 4:
+best_subspan_em: 0.5332068311195446
+
+Gold Index 9:
+best_subspan_em: 0.540796963946869
+
+Gold Index 14:
+best_subspan_em: 0.596584440227704
+
+Gold Index 19:
+best_subspan_em: 0.6948766603415559
+```
+
 # Key-Value Retrieval
 
 Note: all of these experiments were run on one or more A100 GPUs with 80GB of
