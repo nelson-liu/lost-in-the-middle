@@ -44,7 +44,7 @@ instructions to run and evaluate models on the multi-document QA task.
 ## Multi-Document Question Answering Data
 
 [`qa_data/`](./qa_data/) contains multi-document question answering data for the
-oracle setting (1 input document, which is exactly the passage the answers the
+oracle setting (1 input document, which is exactly the passage that answers the
 question) and 10-, 20-, and 30-document settings (where 1 input passage answers
 the question, and the other passages do not contain an NQ-annotated answer).
 
