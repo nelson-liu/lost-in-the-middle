@@ -61,6 +61,56 @@ def get_qa_prompt(
     return prompt_template.format(question=question, search_results="\n".join(formatted_documents))
 
 
+def get_qa_prompt_new(
+    question: str,
+    documents: List[Document],
+    mention_random_ordering: bool,
+    query_aware_contextualization: bool,
+    secret_token_position: int,
+    secret_token: str = "[SECRET_TOKEN]"
+):
+    if not question:
+        raise ValueError(f"Provided `question` must be truthy, got: {question}")
+    if not documents:
+        raise ValueError(f"Provided `documents` must be truthy, got: {documents}")
+
+    if mention_random_ordering and query_aware_contextualization:
+        raise ValueError("Mentioning random ordering cannot be currently used with query aware contextualization")
+
+    if mention_random_ordering:
+        prompt_filename = "qa_ordered_randomly.prompt"
+    elif query_aware_contextualization:
+        prompt_filename = "qa_with_query_aware_contextualization.prompt"
+    else:
+        prompt_filename = "qa.prompt"
+
+    with open(PROMPTS_ROOT / prompt_filename) as f:
+        prompt_template = f.read().rstrip("\n")
+
+    # Format the documents into strings
+    formatted_documents = []
+    for document_index, document in enumerate(documents):
+        formatted_documents.append(
+            f"Document [{document_index+1}](Title: {document.title}) {document.text}"
+        )
+
+    # --- INSERT SECRET TOKEN AFTER N DOCUMENTS ---
+    # Clamp to valid range (0 .. len)
+    st_pos = max(0, min(secret_token_position, len(formatted_documents)))
+
+    formatted_documents = (
+        formatted_documents[:st_pos]
+        + [f"\n=== SECRET TOKEN ===\n{secret_token}\n=== END SECRET TOKEN ===\n"]
+        + formatted_documents[st_pos:]
+    )
+
+    return prompt_template.format(
+        question=question,
+        search_results="\n".join(formatted_documents)
+    )
+
+
+
 def get_closedbook_qa_prompt(question: str):
     if not question:
         raise ValueError(f"Provided `question` must be truthy, got: {question}")
