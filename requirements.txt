@@ -1,26 +1,30 @@
-tqdm
-xopen
-pydantic
-pytest
+# Core utilities
+tqdm==4.66.5
+xopen==1.9.0
+pydantic==2.11.7
+pytest==8.3.3
 
-# For running longchat locally
-longchat@git+https://github.com/DachengLi1/LongChat.git@43d71f03d7711a2ab3b78ee8d1e38b65bb7fd22f
+# For running LongChat locally
+longchat @ git+https://github.com/DachengLi1/LongChat.git@43d71f03d7711a2ab3b78ee8d1e38b65bb7fd22f
 
-# For running MPT locally
-transformers
-torch
-einops
-flash-attn==1.0.5
-triton-pre-mlir@git+https://github.com/vchiley/triton.git@triton_pre_mlir#subdirectory=python
-accelerate
-# For running LLaMA-2 locally
-vllm==v0.2.1.post1
+# Core deep learning stack
+torch==2.8.0
+einops==0.8.0
+accelerate==1.10.0
 
-# Checks style, syntax, and other useful errors.
-flake8==5.0.4
+# Updated Transformers stack (works for both LongChat & vLLM 0.11.0)
+transformers==4.56.2
 
-# Automatic code formatting
-black==22.10.0
+# FlashAttention (prebuilt for CUDA 12.x)
+#flash-attn==2.6.3
 
-# For creating git precommit hooks
-pre-commit
+# Triton compatible with PyTorch 2.3
+triton==3.4.0
+
+# vLLM latest stable (Nov 2025)
+vllm==0.11.0
+
+# Developer utilities
+flake8==7.1.1
+black==24.10.0
+pre-commit==4.0.1
